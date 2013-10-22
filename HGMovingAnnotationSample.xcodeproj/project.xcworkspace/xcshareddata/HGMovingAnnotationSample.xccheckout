@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>681BC341-2FFC-43A5-AB0C-1364B9218C2E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>HGMovingAnnotationSample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BDE63712-94E2-4EF4-8DA6-F2D771A264C3</key>
+		<string>ssh://github.com/100grams/Moving-MKAnnotationView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>HGMovingAnnotationSample.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BDE63712-94E2-4EF4-8DA6-F2D771A264C3</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/100grams/Moving-MKAnnotationView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BDE63712-94E2-4EF4-8DA6-F2D771A264C3</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BDE63712-94E2-4EF4-8DA6-F2D771A264C3</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Moving-MKAnnotationView</string>
+		</dict>
+	</array>
+</dict>
+</plist>

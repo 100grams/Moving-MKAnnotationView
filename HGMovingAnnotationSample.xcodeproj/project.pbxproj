@@ -24,6 +24,7 @@
 		5EB32B30132E407500C40E38 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EB32B2F132E407500C40E38 /* MapKit.framework */; };
 		5EB32B32132E408500C40E38 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EB32B31132E408500C40E38 /* CoreLocation.framework */; };
 		5EB32B36132E409B00C40E38 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EB32B35132E409B00C40E38 /* QuartzCore.framework */; };
+		E902EFB71816972D00328F93 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E902EFB61816972D00328F93 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		5EB32B31132E408500C40E38 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5EB32B35132E409B00C40E38 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* HGMovingAnnotationSample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HGMovingAnnotationSample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		E902EFB61816972D00328F93 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = HGMovingAnnotationSample/Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E902EFB61816972D00328F93 /* Images.xcassets */,
 				5E84CEE5132E5A2100860C58 /* symbol-moving-annotation.png */,
 				5E84CEE6132E5A2100860C58 /* symbol-moving-annotation@2x.png */,
 				5E84CEE2132E5A0400860C58 /* path.nmea */,
@@ -198,6 +201,7 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* HGMovingAnnotationSampleViewController.xib in Resources */,
 				5E84CEE3132E5A0400860C58 /* path.nmea in Resources */,
+				E902EFB71816972D00328F93 /* Images.xcassets in Resources */,
 				5E84CEE7132E5A2100860C58 /* symbol-moving-annotation.png in Resources */,
 				5E84CEE8132E5A2100860C58 /* symbol-moving-annotation@2x.png in Resources */,
 			);
@@ -226,12 +230,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HGMovingAnnotationSample_Prefix.pch;
 				INFOPLIST_FILE = "HGMovingAnnotationSample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = HGMovingAnnotationSample;
 			};
 			name = Debug;
@@ -240,10 +247,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HGMovingAnnotationSample_Prefix.pch;
 				INFOPLIST_FILE = "HGMovingAnnotationSample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = HGMovingAnnotationSample;
 				VALIDATE_PRODUCT = YES;
 			};
