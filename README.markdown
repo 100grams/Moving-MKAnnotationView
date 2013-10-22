@@ -8,26 +8,33 @@ This sample iPhone project uses HGMovingAnnotation and HGMovingAnnotationView to
 HGMovingAnnotation 
 ------------------
 
-This class derives from MKAnnotation and adds the capability of updating its coordinate by reading it from an <code>HGMapPath</code>, which is a collection of MKMapPoints. 
+This class derives from MKAnnotation and adds the capability of updating the coordinate (position) and the rotation of the annotation. 
+In the sample project, location updates are read from an <code>HGMapPath</code>, which is a collection of MKMapPoints stored on file. 
 
-The current implementation of this class reads the next point on the path every second and updates the annotaiton's coordinate. 
+The current implementation of this class reads the next point on the path every second and updates the annotation's coordinate. 
 
 HGMovingAnnotationView
 ----------------------
 
-This class extends MKAnnotationView by animating its position on the map. It does this by observing its HGMovingAnnotation object. 
+This class extends MKAnnotationView by animating its position and rotation on the map. It does this by observing its HGMovingAnnotation object. 
+
+## Update 22 Oct 2013 ##
+
+- Updated to use XCode5 project structure, iOS7 SDK. 
+- Updated deployment target of sample project to iOS6. HGMovingAnnotationView + HGMovingAnnotation can be used on pre-iOS6 versions as well.  
+- Added capability to update and animate the rotation of the annotation view. 
 
 
-## Requirements ##
+## Minimum requirements ##
 
-- iOS 4.3 or later (Sample project was created with Xcode 3.2.6, iOS SDK 4.3 GM Seed)
+- iOS 4.3 or later (Sample project was originally created with Xcode 3.2.6, iOS SDK 4.3 GM Seed)
  
 
 ## License ##
 
-HGPageScrollView is released under MIT License.
+Moving-MKAnnotationView is released under MIT License.
 
-Please report bugs/issues to help improve this code. 
+Please report bugs/issues to info@100grams.nl. 
 
 Any suggestions and/or code to help improve this source will be much appreciated.
 
