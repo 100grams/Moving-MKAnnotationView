@@ -47,7 +47,7 @@
 @synthesize path; 
 @synthesize currentLocation, distanceTravelled; 
 @synthesize isMoving;
-
+@synthesize rotation;
  
 - (id) initWithMapPath: (HGMapPath *) aPath;
 {
@@ -63,11 +63,7 @@
 	return self;
 }
 
-- (void) dealloc
-{
-  self.path = nil;
-  [super dealloc];
-}
+
 
 
 //start tracking vehicle locations. In DEMO mode just read locations from the path...
@@ -87,25 +83,23 @@
 {
 	self.isMoving = YES; 
 
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
   for(int i=_currentPathPointIndex+1; i<path.pointCount; i++)
   {
-	  
-    currentLocation = self.path.points[i]; 
-    
-    _distanceTravelled += MKMetersBetweenMapPoints(self.path.points[i], self.path.points[i-1]);
-        
-	  //send notification
-	  [[NSNotificationCenter defaultCenter] postNotificationName:kObjectMovedNotification object:self]; 
+      currentLocation = self.path.points[i];
 
-	  [NSThread sleepForTimeInterval : DEMO_SPEED];
+      _distanceTravelled += MKMetersBetweenMapPoints(self.path.points[i], self.path.points[i-1]);
+
+      //send notification
+      dispatch_async(dispatch_get_main_queue(), ^{
+          [[NSNotificationCenter defaultCenter] postNotificationName:kObjectMovedNotification object:self];
+      });
+
+      [NSThread sleepForTimeInterval : DEMO_SPEED];
   }
   
   //finished moving along the path - send notification
   [[NSNotificationCenter defaultCenter] postNotificationName:kObjectRechedEndOfPathNotification object:self]; 
 
-  [pool drain];
 }
 
 

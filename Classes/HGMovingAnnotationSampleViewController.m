@@ -86,17 +86,11 @@
 }
 
 
-- (void)dealloc {
-    [super dealloc];
-}
-
-
 - (void) didLoadPath : (NSNotification*) notification
 {
 	// initialize our moving object 
 	HGMapPath *path = (HGMapPath*)[notification object];
-	HGMovingAnnotation *movingObject = [[[HGMovingAnnotation alloc] initWithMapPath:path] autorelease]; //the annotation retains its path
-	[path release];
+	HGMovingAnnotation *movingObject = [[HGMovingAnnotation alloc] initWithMapPath:path]; //the annotation retains its path
 	
 	// add the annotation to the map
 	[_mapView addAnnotation:movingObject];

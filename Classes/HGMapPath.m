@@ -84,7 +84,6 @@
 - (void)dealloc
 {
   free(points);
-  [super dealloc];
 }
 
 
@@ -98,7 +97,7 @@
 	CLLocationCoordinate2D coordinate = [self coordinateFromNmeaLogline : line];
       
 	if (!pointCount)
-	  [self initWithCoordinate : coordinate];
+	  (void)[self initWithCoordinate : coordinate];
 	else
 	  [self addCoordinate : coordinate];
 	

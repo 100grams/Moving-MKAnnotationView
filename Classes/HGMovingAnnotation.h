@@ -54,6 +54,7 @@
 @property (nonatomic,assign) BOOL isMoving; 
 @property (nonatomic, readonly) double distanceTravelled;
 
+@property(nonatomic, readonly) CGFloat rotation;
 
 @end
 

@@ -31,88 +31,237 @@
 #define POSITIONKEY @"positionAnimation"
 #define BOUNDSKEY @"boundsAnimation"
 
-@interface HGMovingAnnotationView()
-- (void) setPosition : (id) pos; 
-@end
+
+static NSString *HGMovingAnnotationTransformsKey = @"TransformsGroupAnimation";
+
+
+//@interface HGMovingAnnotationView()
+//- (void) setPosition : (id) pos; 
+//@end
 
 
 @implementation HGMovingAnnotationView
 
-@synthesize mapView; 
-
+#pragma mark
 - (id) initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier
 {
 	if (self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier]) {
 		self.canShowCallout = YES;
 		self.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//		UIImageView *icon = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"symbol.png"]] autorelease];
-//		icon.bounds = CGRectMake(0, 0, 32, 32);
-//		self.leftCalloutAccessoryView = icon;
 	}
 	return self;
 }
 
-
-- (void) setAnnotation:(id <MKAnnotation>)anAnnotation
+- (void) dealloc
 {
-	if (anAnnotation) {
-		if (!observingMovement) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didMoveAnnotation:) name:kObjectMovedNotification object:anAnnotation]; 
-			observingMovement = YES;
-		}
-	}
-	else {
-		[[NSNotificationCenter defaultCenter] removeObserver:self]; 
-	}
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.layer removeAllAnimations];
+    self.mapView = nil;
+}
 
-	[super setAnnotation : anAnnotation]; 
 
+
+- (void)setAnnotation:(id <MKAnnotation>)anAnnotation
+{
+    if (anAnnotation) {
+        if (anAnnotation != self.annotation) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didMoveAnnotation:) name:kObjectMovedNotification object:anAnnotation];
+        }
+    }
+    else {
+        //		DLog(DEBUG_LEVEL_ERROR, @"%x removed. Clearing annotation object %x", self, anAnnotation);
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [self.layer removeAllAnimations];
+        self.mapView = nil;
+    }
+    
+    [super setAnnotation :anAnnotation];
+    
+    if (self.mapView && anAnnotation) {
+        [self updateTransformsFromAnnotation:(HGMovingAnnotation*) anAnnotation animated:NO];
+    }
+    
+    
 }
 
 
 - (void) didMoveAnnotation : (NSNotification*) notification 
 {
-//	if ([self.layer animationForKey:POSITIONKEY] != nil) {
-//		//attempt to add animation while another is still running. ignore this and let the previous animation finish.
-//		return;
-//	}
-	
-	HGMovingAnnotation *movingObject = (HGMovingAnnotation *)[notification object]; 
-	lastReportedLocation = movingObject.currentLocation;
-	[self performSelectorOnMainThread:@selector(setPosition:) withObject:[NSValue valueWithPointer:&lastReportedLocation] waitUntilDone:YES];
+    [self updateTransformsFromAnnotation:[notification object] animated:YES];
 }
 
-- (void) setPosition : (id) posValue; 
+
+
+//- (void) setPosition : (id) posValue; 
+//{
+//	//extract the mapPoint from this dummy (wrapper) CGPoint struct
+//	MKMapPoint mapPoint = *(MKMapPoint*)[(NSValue*)posValue pointerValue];  
+//	
+//	//now properly convert this mapPoint to CGPoint 
+//	CGPoint toPos;
+//	CGFloat zoomFactor =  self.mapView.visibleMapRect.size.width / self.mapView.bounds.size.width;
+//	toPos.x = mapPoint.x/zoomFactor;
+//	toPos.y = mapPoint.y/zoomFactor;
+//	
+//	if (MKMapRectContainsPoint(self.mapView.visibleMapRect, mapPoint)) {
+//
+//		CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+//		
+//		animation.fromValue = [NSValue valueWithCGPoint:self.center];
+//		animation.toValue = [NSValue valueWithCGPoint:toPos];	
+//		animation.duration = 0.3;
+//		animation.delegate = self;
+//		animation.fillMode = kCAFillModeForwards;
+//		//[self.layer removeAllAnimations];
+//		[self.layer addAnimation:animation forKey:POSITIONKEY];
+//		
+//		//NSLog(@"setPosition ANIMATED %x from (%f, %f) to (%f, %f)", self, self.center.x, self.center.y, toPos.x, toPos.y);
+//	}	
+//	
+//	self.center = toPos;
+//
+//
+//	
+//}
+
+
+
+
+- (void)updateTransformsFromAnnotation:(HGMovingAnnotation*)annotation animated:(BOOL)animated
 {
-	//extract the mapPoint from this dummy (wrapper) CGPoint struct
-	MKMapPoint mapPoint = *(MKMapPoint*)[(NSValue*)posValue pointerValue];  
-	
-	//now properly convert this mapPoint to CGPoint 
-	CGPoint toPos;
-	CGFloat zoomFactor =  self.mapView.visibleMapRect.size.width / self.mapView.bounds.size.width;
-	toPos.x = mapPoint.x/zoomFactor;
-	toPos.y = mapPoint.y/zoomFactor;
-	
-	if (MKMapRectContainsPoint(self.mapView.visibleMapRect, mapPoint)) {
-
-		CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
-		
-		animation.fromValue = [NSValue valueWithCGPoint:self.center];
-		animation.toValue = [NSValue valueWithCGPoint:toPos];	
-		animation.duration = 0.3;
-		animation.delegate = self;
-		animation.fillMode = kCAFillModeForwards;
-		//[self.layer removeAllAnimations];
-		[self.layer addAnimation:animation forKey:POSITIONKEY];
-		
-		//NSLog(@"setPosition ANIMATED %x from (%f, %f) to (%f, %f)", self, self.center.x, self.center.y, toPos.x, toPos.y);
-	}	
-	
-	self.center = toPos;
-
-
-	
+    CLLocationCoordinate2D coordinate = annotation.coordinate;
+    
+    if (CLLocationCoordinate2DIsValid(coordinate)) {
+        
+        NSMutableDictionary *transforms = [NSMutableDictionary dictionaryWithCapacity:2];
+        [transforms setValue:[NSValue valueWithMKCoordinate:coordinate] forKey:@"coordinate"];
+        
+        if ([annotation respondsToSelector:@selector(rotation)]) {
+            // add rotation
+            [transforms setValue:[NSNumber numberWithFloat:annotation.rotation] forKey:@"rotation"];
+        }
+        
+        [self applyTransforms:transforms animated:animated];
+        
+    }
+    
 }
+
+
+
+
+- (void)applyTransforms :(NSDictionary *)transforms animated:(BOOL)animated
+{
+    //extract the updated coordinate of the annotation from 'transforms' dictionary
+    CLLocationCoordinate2D coordinate = [transforms[@"coordinate"] MKCoordinateValue];
+    
+    //convert mapPoint to CGPoint
+    CGPoint toPos = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView]; // self.mapView.visibleMapRect.size.width / self.mapView.bounds.size.width;
+    
+    if (animated) {
+        
+        CAAnimationGroup *theGroup = [CAAnimationGroup animation];
+        
+        theGroup.duration = 0.2;
+        theGroup.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        theGroup.delegate = self;
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+        animation.fromValue = [NSValue valueWithCGPoint:self.center];
+        animation.toValue = [NSValue valueWithCGPoint:toPos];
+        
+        NSMutableArray *animArray = [NSMutableArray arrayWithCapacity:2];
+        [animArray addObject:animation];
+        
+        if ([transforms valueForKey:@"rotation"]) {
+            
+            CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+            rotation.toValue = [transforms valueForKey:@"rotation"];
+            [animArray addObject:rotation];
+        }
+        
+        theGroup.animations = animArray;
+        
+        [self.layer addAnimation:theGroup forKey:HGMovingAnnotationTransformsKey];
+        
+    }
+    else {
+        // set final rotation value for the layer
+        [self.layer setAffineTransform:CGAffineTransformMakeRotation([[transforms valueForKey:@"rotation"] floatValue])];
+        self.center = toPos;
+
+    }
+    
+    
+}
+
+
+- (void)animationDidStart:(CAAnimation *)anim;
+{
+    
+    if ([anim respondsToSelector:@selector(animations)]) {
+
+        NSArray *animations = ((CAAnimationGroup *) anim).animations;
+        // set final position value for the layer
+        self.layer.position = [((CABasicAnimation *) [animations objectAtIndex:0]).toValue CGPointValue];
+        // set final rotation value for the layer
+        [self.layer setAffineTransform:CGAffineTransformMakeRotation([((CABasicAnimation *) [animations objectAtIndex:1]).toValue floatValue])];
+        
+    }
+    else{
+        self.layer.position = [((CABasicAnimation *)anim).toValue CGPointValue];
+    }
+    
+    
+    
+}
+
+
+- (void)setMapView:(MKMapView *)map
+{
+    _mapView = map;
+    if (self.annotation && _mapView) {
+        [self updateTransformsFromAnnotation:(HGMovingAnnotation*) self.annotation animated:NO];
+    }
+}
+
+- (void)mapView :(MKMapView *)mapView didChangeZoomScale:(MKZoomScale)zoomScale
+{
+    
+    CGFloat width = 20;
+    if (zoomScale <= 16) {
+        width = 28;
+    }
+    else if (zoomScale <= 32) {
+        width = 25;
+    }
+    else if (zoomScale <= 64) {
+        width = 20;
+    }
+    else if (zoomScale <= 128) {
+        width = 15;
+    }
+    else if (zoomScale <= 256) {
+        width = 10;
+    }
+    
+    if (width != self.bounds.size.width) {
+        [self setBounds:CGRectMake(0, 0, width, width) animated:YES];
+    }
+    
+}
+
+- (void)setBounds:(CGRect)rect animated :(BOOL)animated
+{
+    if (animated) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.bounds = rect;
+        }];
+    }
+    self.bounds = rect;
+    
+}
+
 
 
 

@@ -28,12 +28,12 @@
 
 @interface HGMovingAnnotationView : MKAnnotationView {
 
-	MKMapView* mapView;
 	MKMapPoint lastReportedLocation;
 	BOOL animating;
 	BOOL observingMovement;
 }
-@property (nonatomic, retain) MKMapView* mapView; 
+
+@property (nonatomic, retain) MKMapView* mapView;
 
 
 
