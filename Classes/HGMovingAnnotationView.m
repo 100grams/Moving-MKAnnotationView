@@ -148,6 +148,7 @@ static NSString *HGMovingAnnotationTransformsKey = @"TransformsGroupAnimation";
 }
 
 
+#define IS_IOS7 (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
 
 
 - (void)applyTransforms :(NSDictionary *)transforms animated:(BOOL)animated
@@ -155,8 +156,15 @@ static NSString *HGMovingAnnotationTransformsKey = @"TransformsGroupAnimation";
     //extract the updated coordinate of the annotation from 'transforms' dictionary
     CLLocationCoordinate2D coordinate = [transforms[@"coordinate"] MKCoordinateValue];
     
-    //convert mapPoint to CGPoint
-    CGPoint toPos = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView]; // self.mapView.visibleMapRect.size.width / self.mapView.bounds.size.width;
+    CGPoint toPos;
+    if (IS_IOS7) {
+        toPos = [self.mapView convertCoordinate:coordinate toPointToView:self.mapView];
+    }
+    else{
+        MKMapPoint toMapPoint = MKMapPointForCoordinate(coordinate);
+        NSInteger mapScale = round(self.mapView.visibleMapRect.size.width / self.mapView.frame.size.width);
+        toPos = (CGPoint){toMapPoint.x/mapScale, toMapPoint.y/mapScale};
+    }
     
     if (animated) {
         
