@@ -204,25 +204,29 @@ static NSString *HGMovingAnnotationTransformsKey = @"TransformsGroupAnimation";
 }
 
 
-- (void)animationDidStart:(CAAnimation *)anim;
+- (void) animationDidStart:(CAAnimation *)anim;
 {
     
     if ([anim respondsToSelector:@selector(animations)]) {
-
+        // anim is actually CAAnimationGroup with multiple animations (namely position and rotation)
         NSArray *animations = ((CAAnimationGroup *) anim).animations;
-        // set final position value for the layer
-        self.layer.position = [((CABasicAnimation *) [animations objectAtIndex:0]).toValue CGPointValue];
-        // set final rotation value for the layer
-        [self.layer setAffineTransform:CGAffineTransformMakeRotation([((CABasicAnimation *) [animations objectAtIndex:1]).toValue floatValue])];
+        
+        if (animations.count > 0) {
+            self.layer.position = [((CABasicAnimation *) [animations objectAtIndex:0]).toValue CGPointValue];
+        }
+        if (animations.count > 1) {
+            // set final rotation value for the layer
+            [self.layer setAffineTransform:CGAffineTransformMakeRotation([((CABasicAnimation *) [animations objectAtIndex:1]).toValue floatValue])];
+        }
         
     }
     else{
+        // anim is a single animation (position)
         self.layer.position = [((CABasicAnimation *)anim).toValue CGPointValue];
     }
     
-    
-    
 }
+
 
 
 - (void)setMapView:(MKMapView *)map
