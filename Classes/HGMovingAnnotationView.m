@@ -162,7 +162,7 @@ static NSString *HGMovingAnnotationTransformsKey = @"TransformsGroupAnimation";
     }
     else{
         MKMapPoint toMapPoint = MKMapPointForCoordinate(coordinate);
-        NSInteger mapScale = round(self.mapView.visibleMapRect.size.width / self.mapView.frame.size.width);
+        CGFloat mapScale = round(self.mapView.visibleMapRect.size.width / self.mapView.frame.size.width);
         toPos = (CGPoint){toMapPoint.x/mapScale, toMapPoint.y/mapScale};
     }
     
