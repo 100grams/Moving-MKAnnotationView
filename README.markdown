@@ -18,7 +18,7 @@ HGMovingAnnotationView
 
 This class extends MKAnnotationView by animating its position and rotation on the map. It does this by observing its HGMovingAnnotation object. 
 
-## Update 22 Oct 2013 ##
+## iOS7 Compatible ##
 
 - Updated to use XCode5 project structure, iOS7 SDK. 
 - Updated deployment target of sample project to iOS6. HGMovingAnnotationView + HGMovingAnnotation can be used on pre-iOS6 versions as well.  
