@@ -20,7 +20,7 @@ This class extends MKAnnotationView by animating its position and rotation on th
 
 ## iOS7 Compatible ##
 
-- Updated to use XCode5 project structure, iOS7 SDK. 
+- Updated to use Xcode5 project structure, iOS7 SDK. 
 - Updated deployment target of sample project to iOS6. HGMovingAnnotationView + HGMovingAnnotation can be used on pre-iOS6 versions as well.  
 - Added capability to update and animate the rotation of the annotation view. 
 
